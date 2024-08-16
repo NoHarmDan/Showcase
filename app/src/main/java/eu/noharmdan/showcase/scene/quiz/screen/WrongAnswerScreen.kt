@@ -17,12 +17,18 @@ import androidx.compose.ui.unit.dp
 import eu.noharmdan.showcase.R
 import eu.noharmdan.showcase.scene.quiz.OnEvent
 import eu.noharmdan.showcase.scene.quiz.QuizViewEvent
-import eu.noharmdan.showcase.scene.quiz.QuizViewState
+import eu.noharmdan.showcase.scene.quiz.model.Question
 import eu.noharmdan.showcase.scene.quiz.model.placeholderQuestion
 import eu.noharmdan.showcase.ui.theme.ShowcaseTheme
 
 @Composable
-fun WrongAnswerScreen(modifier: Modifier = Modifier, state: QuizViewState.State.WrongAnswer, onEvent: OnEvent) {
+fun WrongAnswerScreen(
+    modifier: Modifier = Modifier,
+    highScore: Int,
+    currentScore: Int,
+    question: Question,
+    onEvent: OnEvent
+) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -32,11 +38,11 @@ fun WrongAnswerScreen(modifier: Modifier = Modifier, state: QuizViewState.State.
     ) {
         Text(
             text = stringResource(id = R.string.wrong_answer),
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        val question = state.question
         Text(
             text = stringResource(
                 id = R.string.correct_answer_is,
@@ -48,13 +54,26 @@ fun WrongAnswerScreen(modifier: Modifier = Modifier, state: QuizViewState.State.
             modifier = Modifier.padding(bottom = 32.dp)
         )
 
+        Text(
+            text = stringResource(id = R.string.current_score, currentScore),
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+        )
+
+        Text(
+            text = stringResource(id = R.string.current_high_score, highScore),
+            style = MaterialTheme.typography.labelMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = 32.dp)
+        )
+
         Button(
             onClick = {
                 onEvent(QuizViewEvent.OnStartQuizSelected)
             },
             content = {
                 Text(
-                    text = stringResource(id = R.string.try_again),
+                    text = stringResource(id = R.string.start_again),
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
             }
@@ -67,9 +86,9 @@ fun WrongAnswerScreen(modifier: Modifier = Modifier, state: QuizViewState.State.
 private fun WrongAnswerPreview() {
     ShowcaseTheme {
         WrongAnswerScreen(
-            state = QuizViewState.State.WrongAnswer(
-                question = placeholderQuestion
-            ),
+            question = placeholderQuestion,
+            currentScore = 17,
+            highScore = 23,
             onEvent = {}
         )
     }

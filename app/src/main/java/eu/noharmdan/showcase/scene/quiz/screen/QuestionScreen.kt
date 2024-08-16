@@ -16,39 +16,54 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import eu.noharmdan.showcase.R
 import eu.noharmdan.showcase.scene.quiz.OnEvent
 import eu.noharmdan.showcase.scene.quiz.QuizViewEvent
-import eu.noharmdan.showcase.scene.quiz.QuizViewState
+import eu.noharmdan.showcase.scene.quiz.model.Question
 import eu.noharmdan.showcase.scene.quiz.model.placeholderQuestion
 import eu.noharmdan.showcase.ui.theme.ShowcaseTheme
-import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun QuestionScreen(modifier: Modifier = Modifier, state: QuizViewState.State.Questions, onEvent: OnEvent) {
+fun QuestionScreen(
+    modifier: Modifier = Modifier,
+    highScore: Int,
+    currentScore: Int,
+    currentQuestion: Question,
+    onEvent: OnEvent
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(space = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .padding(all = 16.dp)
             .fillMaxSize()
     ) {
-        val currentQuestion = state.currentQuestion
         val currentAnswers = currentQuestion.answers
 
+        val scoreTextId = if (currentScore > highScore) R.string.new_high_score else R.string.current_score
+
+        Text(
+            text = stringResource(id = scoreTextId, currentScore),
+            style = MaterialTheme.typography.labelMedium,
+            textAlign = TextAlign.End,
+            modifier = Modifier.fillMaxWidth()
+        )
+
         Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .weight(1f)
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
+                .padding(bottom = 32.dp)
         ) {
             Text(
                 text = currentQuestion.text,
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(bottom = 32.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
             )
         }
 
@@ -98,12 +113,9 @@ fun QuestionScreen(modifier: Modifier = Modifier, state: QuizViewState.State.Que
 private fun QuestionPreview() {
     ShowcaseTheme {
         QuestionScreen(
-            state = QuizViewState.State.Questions(
-                questions = persistentListOf(
-                    placeholderQuestion
-                ),
-                currentQuestionIndex = 0
-            ),
+            highScore = 17,
+            currentScore = 6,
+            currentQuestion = placeholderQuestion,
             onEvent = {}
         )
     }

@@ -36,9 +36,6 @@ fun QuizScreen() {
 @Composable
 fun Content(viewState: QuizViewState, onEvent: OnEvent) {
     Scaffold(
-        topBar = {
-            // todo
-        },
         content = { paddingValues ->
             val modifier = Modifier.padding(paddingValues = paddingValues)
 
@@ -60,13 +57,17 @@ fun Content(viewState: QuizViewState, onEvent: OnEvent) {
 
                 is QuizViewState.State.Questions -> QuestionScreen(
                     modifier = modifier,
-                    state = viewState.state,
+                    highScore = viewState.highScore,
+                    currentScore = viewState.currentScore,
+                    currentQuestion = viewState.state.currentQuestion,
                     onEvent = onEvent
                 )
 
                 is QuizViewState.State.WrongAnswer -> WrongAnswerScreen(
                     modifier = modifier,
-                    state = viewState.state,
+                    highScore = viewState.highScore,
+                    currentScore = viewState.currentScore,
+                    question = viewState.state.question,
                     onEvent = onEvent
                 )
             }

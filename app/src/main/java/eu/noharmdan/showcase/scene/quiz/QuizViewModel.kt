@@ -27,15 +27,19 @@ class QuizViewModel(application: Application, private val appDataStore: AppDataS
 
     override fun onEvent(event: QuizViewEvent) {
         when (event) {
-            QuizViewEvent.OnStartQuizSelected, QuizViewEvent.OnTryAgainSelected -> getRandomQuestions()
+            QuizViewEvent.OnStartQuizSelected -> getRandomQuestions(resetScore = true)
+            QuizViewEvent.OnTryAgainSelected -> getRandomQuestions(resetScore = false)
             is QuizViewEvent.OnAnswerSelected -> onAnswerSelected(event.answer)
         }
     }
 
-    private fun getRandomQuestions() {
+    private fun getRandomQuestions(resetScore: Boolean) {
         ioScope.launch {
             updateState {
-                copy(state = QuizViewState.State.Loading)
+                copy(
+                    state = QuizViewState.State.Loading,
+                    currentScore = if (resetScore) 0 else currentScore,
+                )
             }
 
             getRandomQuestionsUseCase.execute(
@@ -63,21 +67,21 @@ class QuizViewModel(application: Application, private val appDataStore: AppDataS
         with(currentState()) {
             defaultScope.launch {
                 if (answer.isCorrect && state is QuizViewState.State.Questions) {
-                    val totalCorrectAnswers = totalCorrectAnswers + 1
+                    val score = currentScore + 1
                     val nextQuestionIndex = state.currentQuestionIndex + 1
 
                     if (nextQuestionIndex == QUESTIONS_LIMIT) {
                         updateState {
                             copy(
-                                totalCorrectAnswers = totalCorrectAnswers
+                                currentScore = score
                             )
                         }
 
-                        getRandomQuestions()
+                        getRandomQuestions(true)
                     } else {
                         updateState {
                             copy(
-                                totalCorrectAnswers = totalCorrectAnswers,
+                                currentScore = score,
                                 state = (state as? QuizViewState.State.Questions)?.copy(
                                     /*
                                      * Double-checking for type could be avoided if the whole block was wrapped
@@ -91,15 +95,14 @@ class QuizViewModel(application: Application, private val appDataStore: AppDataS
                         }
                     }
                 } else {
-                    if (totalCorrectAnswers > highScore) {
+                    if (currentScore > highScore) {
                         withContext(Dispatchers.IO) {
-                            appDataStore.setHighScore(highScore = totalCorrectAnswers)
+                            appDataStore.setHighScore(highScore = currentScore)
                         }
                     }
 
                     updateState {
                         copy(
-                            totalCorrectAnswers = 0,
                             state = (state as? QuizViewState.State.Questions)?.currentQuestion?.let { question ->
                                 QuizViewState.State.WrongAnswer(question = question)
                             } ?: QuizViewState.State.Error // This should never happen, but better safe than sorry

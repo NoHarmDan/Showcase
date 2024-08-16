@@ -9,7 +9,7 @@ import kotlinx.collections.immutable.persistentListOf
 data class QuizViewState(
     val state: State = State.Introduction,
     val highScore: Int = 0,
-    val totalCorrectAnswers: Int = 0,
+    val currentScore: Int = 0,
 ) : ViewState {
 
     sealed class State {
