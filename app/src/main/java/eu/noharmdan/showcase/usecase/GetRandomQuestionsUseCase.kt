@@ -1,7 +1,7 @@
 package eu.noharmdan.showcase.usecase
 
 import eu.noharmdan.showcase.base.UseCase
-import eu.noharmdan.showcase.model.Question
+import eu.noharmdan.showcase.scene.quiz.model.Question
 import eu.noharmdan.showcase.model.QuestionCategory
 import eu.noharmdan.showcase.model.QuestionDifficulty
 import eu.noharmdan.showcase.rest.ApiResponse
@@ -29,6 +29,10 @@ class GetRandomQuestionsUseCase(
                     Question.fromQuestionResponse(questionResponse)
                 }
                 is ApiResponse.NoContent -> emptyList()
+                is ApiResponse.Error -> {
+                    response.error?.printStackTrace()
+                    null
+                }
                 else -> null
             }
         )

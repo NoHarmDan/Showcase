@@ -11,4 +11,9 @@
     <string name="category_geography">Geography</string>
     <string name="category_food_and_drink">Food and Drink</string>
     <string name="category_general_knowledge">General Knowledge</string>
+    <string name="start_quiz">Start Quiz</string>
+    <string name="something_went_wrong">Oops, something went wrong…</string>
+    <string name="try_again">Try again</string>
+    <string name="wrong_answer">Oops, that was not the correct answer…</string>
+    <string name="correct_answer_is">The correct answer to \"%1$s\" is \"%2$s\"</string>
 </resources>

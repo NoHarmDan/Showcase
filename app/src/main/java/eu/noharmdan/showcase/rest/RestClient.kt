@@ -10,6 +10,7 @@ import retrofit2.http.Query
 interface RestClient {
 
     @GET("questions")
+    @JvmSuppressWildcards
     suspend fun getRandomQuestions(
         @Query("limit") limit: Int? = null,
         @Query("categories") categories: List<QuestionCategory>? = null,

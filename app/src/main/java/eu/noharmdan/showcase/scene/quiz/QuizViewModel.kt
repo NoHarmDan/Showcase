@@ -2,31 +2,97 @@ package eu.noharmdan.showcase.scene.quiz
 
 import android.app.Application
 import eu.noharmdan.showcase.base.BaseViewModel
-import eu.noharmdan.showcase.base.ViewCommand
+import eu.noharmdan.showcase.scene.quiz.model.Question
 import eu.noharmdan.showcase.usecase.GetRandomQuestionsUseCase
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-class QuizViewModel(application: Application) : BaseViewModel<QuizViewState, QuizViewEvent, ViewCommand>(application, QuizViewState()) {
+class QuizViewModel(application: Application) : BaseViewModel<QuizViewState, QuizViewEvent, QuizViewCommand>(application, QuizViewState()) {
 
     private val getRandomQuestionsUseCase: GetRandomQuestionsUseCase by inject()
 
     override fun onEvent(event: QuizViewEvent) {
         when (event) {
-            QuizViewEvent.StartQuiz -> getRandomQuestions()
+            QuizViewEvent.OnStartQuizSelected, QuizViewEvent.OnTryAgainSelected -> getRandomQuestions()
+            is QuizViewEvent.OnAnswerSelected -> onAnswerSelected(event.answer)
         }
     }
 
     private fun getRandomQuestions() {
         ioScope.launch {
+            updateState {
+                copy(state = QuizViewState.State.Loading)
+            }
+
             getRandomQuestionsUseCase.execute(
-                params = GetRandomQuestionsUseCase.GetRandomQuestionsParams(limit = 20)
+                params = GetRandomQuestionsUseCase.GetRandomQuestionsParams(limit = QUESTIONS_LIMIT)
             ).collect { questions ->
                 updateState {
-                    copy(questions = questions?.toImmutableList())
+                    val nextState = if (questions == null) {
+                        QuizViewState.State.Error
+                    } else {
+                        QuizViewState.State.Questions(
+                            questions = questions.toImmutableList(),
+                            currentQuestionIndex = 0
+                        )
+                    }
+
+                    copy(
+                        state = nextState
+                    )
                 }
             }
         }
+    }
+
+    private fun onAnswerSelected(answer: Question.Answer) {
+        with(currentState()) {
+            defaultScope.launch {
+                if (answer.isCorrect && state is QuizViewState.State.Questions) {
+                    val totalCorrectAnswers = totalCorrectAnswers + 1
+                    val nextQuestionIndex = state.currentQuestionIndex + 1
+
+                    if (nextQuestionIndex == QUESTIONS_LIMIT) {
+                        updateState {
+                            copy(
+                                totalCorrectAnswers = totalCorrectAnswers
+                            )
+                        }
+
+                        getRandomQuestions()
+                    } else {
+                        updateState {
+                            copy(
+                                totalCorrectAnswers = totalCorrectAnswers,
+                                state = (state as? QuizViewState.State.Questions)?.copy(
+                                    /*
+                                     * Double-checking for type could be avoided if the whole block was wrapped
+                                     * with updateState rather than with(currentState()), but this way is more
+                                     * concise, readable and more resilient against changes that could cause
+                                     * synchronization issues, e.g. with calling getRandomQuestions().
+                                     */
+                                    currentQuestionIndex = nextQuestionIndex
+                                ) ?: QuizViewState.State.Error
+                            )
+                        }
+                    }
+                } else {
+                    // todo persist high-score
+                    updateState {
+                        copy(
+                            totalCorrectAnswers = 0,
+                            state = (state as? QuizViewState.State.Questions)?.currentQuestion?.let { question ->
+                                QuizViewState.State.WrongAnswer(question = question)
+                            } ?: QuizViewState.State.Error // This should never happen, but better safe than sorry
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    companion object {
+        const val QUESTIONS_LIMIT = 3
     }
 }
