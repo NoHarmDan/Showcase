@@ -54,6 +54,7 @@ fun Content(viewState: QuizViewState, onEvent: OnEvent) {
 
                 QuizViewState.State.Introduction -> IntroductionScreen(
                     modifier = modifier,
+                    highScore = viewState.highScore,
                     onEvent = onEvent
                 )
 

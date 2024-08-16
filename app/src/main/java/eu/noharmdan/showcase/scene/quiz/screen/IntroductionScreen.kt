@@ -20,7 +20,7 @@ import eu.noharmdan.showcase.scene.quiz.QuizViewEvent
 import eu.noharmdan.showcase.ui.theme.ShowcaseTheme
 
 @Composable
-fun IntroductionScreen(modifier: Modifier = Modifier, onEvent: OnEvent) {
+fun IntroductionScreen(modifier: Modifier = Modifier, highScore: Int, onEvent: OnEvent) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -32,10 +32,15 @@ fun IntroductionScreen(modifier: Modifier = Modifier, onEvent: OnEvent) {
             text = stringResource(id = R.string.app_name),
             style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 32.dp)
+            modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        // todo last highscore?
+        Text(
+            text = stringResource(id = R.string.current_high_score, highScore),
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = 32.dp)
+        )
 
         Button(
             onClick = {
@@ -55,6 +60,9 @@ fun IntroductionScreen(modifier: Modifier = Modifier, onEvent: OnEvent) {
 @Composable
 private fun IntroductionPreview() {
     ShowcaseTheme {
-        IntroductionScreen {}
+        IntroductionScreen(
+            highScore = 16,
+            onEvent = {}
+        )
     }
 }

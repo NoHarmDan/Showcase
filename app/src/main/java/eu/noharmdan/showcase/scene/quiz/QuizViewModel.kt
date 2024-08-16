@@ -2,15 +2,28 @@ package eu.noharmdan.showcase.scene.quiz
 
 import android.app.Application
 import eu.noharmdan.showcase.base.BaseViewModel
+import eu.noharmdan.showcase.model.datastore.AppDataStore
 import eu.noharmdan.showcase.scene.quiz.model.Question
 import eu.noharmdan.showcase.usecase.GetRandomQuestionsUseCase
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.core.component.inject
 
-class QuizViewModel(application: Application) : BaseViewModel<QuizViewState, QuizViewEvent, QuizViewCommand>(application, QuizViewState()) {
+class QuizViewModel(application: Application, private val appDataStore: AppDataStore) : BaseViewModel<QuizViewState, QuizViewEvent, QuizViewCommand>(application, QuizViewState()) {
 
     private val getRandomQuestionsUseCase: GetRandomQuestionsUseCase by inject()
+
+    init {
+        appDataStore.highScore.onEach { highScore ->
+            updateState {
+                copy(highScore = highScore)
+            }
+        }.launchIn(ioScope)
+    }
 
     override fun onEvent(event: QuizViewEvent) {
         when (event) {
@@ -78,7 +91,12 @@ class QuizViewModel(application: Application) : BaseViewModel<QuizViewState, Qui
                         }
                     }
                 } else {
-                    // todo persist high-score
+                    if (totalCorrectAnswers > highScore) {
+                        withContext(Dispatchers.IO) {
+                            appDataStore.setHighScore(highScore = totalCorrectAnswers)
+                        }
+                    }
+
                     updateState {
                         copy(
                             totalCorrectAnswers = 0,
@@ -93,6 +111,6 @@ class QuizViewModel(application: Application) : BaseViewModel<QuizViewState, Qui
     }
 
     companion object {
-        const val QUESTIONS_LIMIT = 3
+        const val QUESTIONS_LIMIT = 5
     }
 }
