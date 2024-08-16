@@ -46,7 +46,9 @@ data class Question(
                             isCorrect = false
                         )
                     }
-                    ).toImmutableList(),
+                    )
+                .shuffled()
+                .toImmutableList(),
         )
     }
 }
