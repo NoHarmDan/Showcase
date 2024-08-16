@@ -77,7 +77,7 @@ class QuizViewModel(application: Application, private val appDataStore: AppDataS
                             )
                         }
 
-                        getRandomQuestions(true)
+                        getRandomQuestions(resetScore = false)
                     } else {
                         updateState {
                             copy(
