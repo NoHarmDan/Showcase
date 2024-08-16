@@ -7,6 +7,7 @@ import eu.noharmdan.showcase.scene.quiz.model.Question
 import eu.noharmdan.showcase.usecase.GetRandomQuestionsUseCase
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -66,54 +67,73 @@ class QuizViewModel(application: Application, private val appDataStore: AppDataS
     private fun onAnswerSelected(answer: Question.Answer) {
         with(currentState()) {
             defaultScope.launch {
-                if (answer.isCorrect && state is QuizViewState.State.Questions) {
-                    val score = currentScore + 1
-                    val nextQuestionIndex = state.currentQuestionIndex + 1
+                if (state !is QuizViewState.State.Questions || state.isCorrectAnswerSelected) {
+                    return@launch
+                }
 
-                    if (nextQuestionIndex == QUESTIONS_LIMIT) {
-                        updateState {
-                            copy(
-                                currentScore = score
-                            )
-                        }
-
-                        getRandomQuestions(resetScore = false)
-                    } else {
-                        updateState {
-                            copy(
-                                currentScore = score,
-                                state = (state as? QuizViewState.State.Questions)?.copy(
-                                    /*
-                                     * Double-checking for type could be avoided if the whole block was wrapped
-                                     * with updateState rather than with(currentState()), but this way is more
-                                     * concise, readable and more resilient against changes that could cause
-                                     * synchronization issues, e.g. with calling getRandomQuestions().
-                                     */
-                                    currentQuestionIndex = nextQuestionIndex
-                                ) ?: QuizViewState.State.Error
-                            )
-                        }
-                    }
+                if (answer.isCorrect) {
+                    onCorrectAnswerSelected(state)
                 } else {
-                    if (currentScore > highScore) {
-                        withContext(Dispatchers.IO) {
-                            appDataStore.setHighScore(highScore = currentScore)
-                        }
-                    }
-
-                    updateState {
-                        copy(
-                            state = (state as? QuizViewState.State.Questions)?.currentQuestion?.let { question ->
-                                QuizViewState.State.WrongAnswer(question = question)
-                            } ?: QuizViewState.State.Error // This should never happen, but better safe than sorry
-                        )
-                    }
+                    onWrongAnswerSelected(state)
                 }
             }
         }
     }
 
+    private suspend fun QuizViewState.onCorrectAnswerSelected(questionsState: QuizViewState.State.Questions) {
+        updateState {
+            copy(
+                state = questionsState.copy(
+                    isCorrectAnswerSelected = true
+                )
+            )
+        }
+
+        delay(timeMillis = NEXT_QUESTION_DELAY)
+
+        val score = currentScore + 1
+        val nextQuestionIndex = questionsState.currentQuestionIndex + 1
+
+        if (nextQuestionIndex == QUESTIONS_LIMIT) {
+            updateState {
+                copy(
+                    currentScore = score,
+                    state = questionsState.copy(
+                        isCorrectAnswerSelected = false
+                    )
+                )
+            }
+
+            getRandomQuestions(resetScore = false)
+        } else {
+            updateState {
+                copy(
+                    currentScore = score,
+                    state = questionsState.copy(
+                        currentQuestionIndex = nextQuestionIndex,
+                        isCorrectAnswerSelected = false
+                    )
+                )
+            }
+        }
+    }
+
+    private suspend fun QuizViewState.onWrongAnswerSelected(state: QuizViewState.State.Questions) {
+        if (currentScore > highScore) {
+            withContext(Dispatchers.IO) {
+                appDataStore.setHighScore(highScore = currentScore)
+            }
+        }
+
+        updateState {
+            copy(
+                state = QuizViewState.State.WrongAnswer(question = state.currentQuestion)
+            )
+        }
+    }
+
     companion object {
         const val QUESTIONS_LIMIT = 5
+        const val NEXT_QUESTION_DELAY = 800L
     }
 }

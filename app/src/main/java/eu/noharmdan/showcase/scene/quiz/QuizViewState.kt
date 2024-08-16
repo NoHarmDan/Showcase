@@ -21,6 +21,7 @@ data class QuizViewState(
         data class Questions(
             val questions: ImmutableList<Question> = persistentListOf(),
             val currentQuestionIndex: Int = 0,
+            val isCorrectAnswerSelected: Boolean = false,
         ) : State() {
             val currentQuestion = questions[currentQuestionIndex] // todo out of bounds safety?
         }

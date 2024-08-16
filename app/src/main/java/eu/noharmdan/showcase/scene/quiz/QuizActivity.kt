@@ -60,6 +60,7 @@ fun Content(viewState: QuizViewState, onEvent: OnEvent) {
                     highScore = viewState.highScore,
                     currentScore = viewState.currentScore,
                     currentQuestion = viewState.state.currentQuestion,
+                    isCorrectAnswerSelected = viewState.state.isCorrectAnswerSelected,
                     onEvent = onEvent
                 )
 

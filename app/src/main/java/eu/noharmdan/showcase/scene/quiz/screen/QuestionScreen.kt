@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +27,7 @@ import eu.noharmdan.showcase.scene.quiz.QuizViewEvent
 import eu.noharmdan.showcase.scene.quiz.model.Question
 import eu.noharmdan.showcase.scene.quiz.model.placeholderQuestion
 import eu.noharmdan.showcase.ui.theme.ShowcaseTheme
+import eu.noharmdan.showcase.ui.theme.highlightedButtonColors
 
 @Composable
 fun QuestionScreen(
@@ -33,6 +35,7 @@ fun QuestionScreen(
     highScore: Int,
     currentScore: Int,
     currentQuestion: Question,
+    isCorrectAnswerSelected: Boolean,
     onEvent: OnEvent
 ) {
     Column(
@@ -45,12 +48,22 @@ fun QuestionScreen(
 
         val scoreTextId = if (currentScore > highScore) R.string.new_high_score else R.string.current_score
 
-        Text(
-            text = stringResource(id = scoreTextId, currentScore),
-            style = MaterialTheme.typography.labelMedium,
-            textAlign = TextAlign.End,
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
-        )
+        ) {
+            Text(
+                text = stringResource(id = currentQuestion.category.titleResId),
+                style = MaterialTheme.typography.labelMedium,
+                textAlign = TextAlign.End,
+            )
+
+            Text(
+                text = stringResource(id = scoreTextId, currentScore),
+                style = MaterialTheme.typography.labelMedium,
+                textAlign = TextAlign.End,
+            )
+        }
 
         Box(
             contentAlignment = Alignment.Center,
@@ -82,8 +95,16 @@ fun QuestionScreen(
                     if (itemIndex < currentAnswers.size) {
                         val answer = currentAnswers[itemIndex]
 
+                        // todo move isCorrectAnswerSelected to answer?
+                        val buttonColors = if (answer.isCorrect && isCorrectAnswerSelected) {
+                            highlightedButtonColors()
+                        } else {
+                            ButtonDefaults.buttonColors()
+                        }
+
                         Button(
                             shape = RoundedCornerShape(size = 16.dp),
+                            colors = buttonColors,
                             modifier = Modifier
                                 .weight(weight = 1f)
                                 .fillMaxHeight(),
@@ -93,7 +114,8 @@ fun QuestionScreen(
                             content = {
                                 Text(
                                     text = answer.text,
-                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
+                                    style = MaterialTheme.typography.titleMedium,
                                     textAlign = TextAlign.Center
                                 )
                             }
@@ -116,6 +138,7 @@ private fun QuestionPreview() {
             highScore = 17,
             currentScore = 6,
             currentQuestion = placeholderQuestion,
+            isCorrectAnswerSelected = true,
             onEvent = {}
         )
     }
