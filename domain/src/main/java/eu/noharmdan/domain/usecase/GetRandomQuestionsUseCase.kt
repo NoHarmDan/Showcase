@@ -1,12 +1,12 @@
-package eu.noharmdan.showcase.usecase
+package eu.noharmdan.domain.usecase
 
 import eu.noharmdan.common.base.UseCase
 import eu.noharmdan.data.model.Question
 import eu.noharmdan.data.model.QuestionCategory
 import eu.noharmdan.data.model.QuestionDifficulty
-import eu.noharmdan.showcase.rest.ApiResponse
-import eu.noharmdan.showcase.rest.RestClient
-import eu.noharmdan.showcase.rest.getResult
+import eu.noharmdan.domain.rest.ApiResponse
+import eu.noharmdan.domain.rest.RestClient
+import eu.noharmdan.domain.rest.getResult
 import kotlinx.coroutines.flow.flow
 
 class GetRandomQuestionsUseCase(

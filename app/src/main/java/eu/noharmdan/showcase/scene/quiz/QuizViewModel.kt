@@ -2,12 +2,10 @@ package eu.noharmdan.showcase.scene.quiz
 
 import android.app.Application
 import eu.noharmdan.common.base.BaseViewModel
-import eu.noharmdan.common.util.replace
 import eu.noharmdan.data.datastore.AppDataStore
 import eu.noharmdan.showcase.scene.quiz.util.toQuestionViewState
 import eu.noharmdan.showcase.scene.quiz.util.withAnswerSetSelected
-import eu.noharmdan.showcase.usecase.GetRandomQuestionsUseCase
-import kotlinx.collections.immutable.ImmutableList
+import eu.noharmdan.domain.usecase.GetRandomQuestionsUseCase
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

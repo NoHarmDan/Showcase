@@ -1,4 +1,4 @@
-package eu.noharmdan.showcase.rest.converter
+package eu.noharmdan.domain.rest.converter
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer

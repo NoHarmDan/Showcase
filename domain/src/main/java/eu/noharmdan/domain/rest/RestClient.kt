@@ -1,8 +1,8 @@
-package eu.noharmdan.showcase.rest
+package eu.noharmdan.domain.rest
 
 import eu.noharmdan.data.model.QuestionCategory
 import eu.noharmdan.data.model.QuestionDifficulty
-import eu.noharmdan.showcase.rest.response.QuestionResponse
+import eu.noharmdan.domain.rest.response.QuestionResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

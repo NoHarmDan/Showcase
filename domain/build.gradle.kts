@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "eu.noharmdan.data"
+    namespace = "eu.noharmdan.domain"
     compileSdk = 34
 
     defaultConfig {
@@ -32,8 +32,13 @@ android {
 dependencies {
 
     implementation(project(":common"))
+    implementation(project(":data"))
 
     implementation(libs.androidx.core.ktx)
+
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

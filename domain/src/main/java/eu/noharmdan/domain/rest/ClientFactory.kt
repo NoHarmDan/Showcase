@@ -1,4 +1,4 @@
-package eu.noharmdan.showcase.rest
+package eu.noharmdan.domain.rest
 
 import android.util.Log
 import com.google.gson.Gson
@@ -7,8 +7,8 @@ import com.google.gson.JsonParser
 import com.google.gson.JsonSyntaxException
 import eu.noharmdan.data.model.QuestionCategory
 import eu.noharmdan.data.model.QuestionDifficulty
-import eu.noharmdan.showcase.rest.converter.QuestionCategoryConverter
-import eu.noharmdan.showcase.rest.converter.QuestionDifficultyConverter
+import eu.noharmdan.domain.rest.converter.QuestionCategoryConverter
+import eu.noharmdan.domain.rest.converter.QuestionDifficultyConverter
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

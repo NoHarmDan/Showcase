@@ -1,4 +1,4 @@
-package eu.noharmdan.showcase.rest.response
+package eu.noharmdan.domain.rest.response
 
 data class QuestionTextResponse(
     val text: String,

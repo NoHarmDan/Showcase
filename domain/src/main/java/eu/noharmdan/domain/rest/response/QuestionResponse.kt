@@ -1,4 +1,4 @@
-package eu.noharmdan.showcase.rest.response
+package eu.noharmdan.domain.rest.response
 
 import eu.noharmdan.data.model.Question
 import eu.noharmdan.data.model.QuestionCategory

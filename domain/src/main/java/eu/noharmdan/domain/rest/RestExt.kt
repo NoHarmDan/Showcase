@@ -1,4 +1,4 @@
-package eu.noharmdan.showcase.rest
+package eu.noharmdan.domain.rest
 
 import retrofit2.Response
 

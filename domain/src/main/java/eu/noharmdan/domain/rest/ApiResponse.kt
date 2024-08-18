@@ -1,4 +1,4 @@
-package eu.noharmdan.showcase.rest
+package eu.noharmdan.domain.rest
 
 sealed class ApiResponse<out T>(
     val code: Int
