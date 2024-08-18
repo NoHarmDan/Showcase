@@ -7,16 +7,23 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
 class DataStoreInstrumentedTest {
 
+    /**
+     * A simple test for the [QuizDataStore] score storage.
+     *
+     * Tests whether a correct value is available through [QuizDataStore.highScore]
+     * right after being stored through [QuizDataStore.setHighScore].
+     */
     @Test
     fun scorePersistence_isCorrect() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val dataStore = QuizDataStore(context)
 
-        val score = 17
+        val score = Random.nextInt()
 
         dataStore.setHighScore(score)
 

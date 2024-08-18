@@ -10,6 +10,9 @@ import com.google.gson.JsonSerializer
 import eu.noharmdan.data.model.QuestionDifficulty
 import java.lang.reflect.Type
 
+/**
+ * A converter class for JSON serialization and deserialization of a [QuestionDifficulty] using its [QuestionDifficulty.id].
+ */
 internal class QuestionDifficultyConverter : JsonDeserializer<QuestionDifficulty?>, JsonSerializer<QuestionDifficulty?> {
     @Throws(JsonParseException::class)
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext?): QuestionDifficulty {

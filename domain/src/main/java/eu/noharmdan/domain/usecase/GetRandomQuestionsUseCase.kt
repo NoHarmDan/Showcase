@@ -1,17 +1,17 @@
 package eu.noharmdan.domain.usecase
 
-import eu.noharmdan.common.base.UseCase
+import eu.noharmdan.common.base.BaseUseCase
 import eu.noharmdan.data.model.Question
 import eu.noharmdan.data.model.QuestionCategory
 import eu.noharmdan.data.model.QuestionDifficulty
 import eu.noharmdan.domain.rest.ApiResponse
 import eu.noharmdan.domain.rest.RestClient
-import eu.noharmdan.domain.rest.getResult
+import eu.noharmdan.domain.util.getResult
 import kotlinx.coroutines.flow.flow
 
 class GetRandomQuestionsUseCase(
     private val restClient: RestClient
-) : UseCase<GetRandomQuestionsUseCase.GetRandomQuestionsParams, List<Question>?>() {
+) : BaseUseCase<GetRandomQuestionsUseCase.GetRandomQuestionsParams, List<Question>?>() {
 
     override fun execute(params: GetRandomQuestionsParams) = flow {
         val response = restClient.getResult {
