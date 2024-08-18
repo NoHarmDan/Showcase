@@ -3,7 +3,9 @@ package eu.noharmdan.showcase.scene.quiz
 import android.app.Application
 import eu.noharmdan.common.base.BaseViewModel
 import eu.noharmdan.common.util.replace
-import eu.noharmdan.showcase.model.datastore.AppDataStore
+import eu.noharmdan.data.datastore.AppDataStore
+import eu.noharmdan.showcase.scene.quiz.util.toQuestionViewState
+import eu.noharmdan.showcase.scene.quiz.util.withAnswerSetSelected
 import eu.noharmdan.showcase.usecase.GetRandomQuestionsUseCase
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -53,7 +55,9 @@ class QuizViewModel(application: Application, private val appDataStore: AppDataS
                         QuizViewState.State.Error
                     } else {
                         QuizViewState.State.Questions(
-                            questions = questions.toImmutableList(),
+                            questions = questions.map { question ->
+                                question.toQuestionViewState()
+                            }.toImmutableList(),
                             currentQuestionIndex = 0
                         )
                     }
@@ -66,7 +70,7 @@ class QuizViewModel(application: Application, private val appDataStore: AppDataS
         }
     }
 
-    private fun onAnswerSelected(answer: Question.Answer) {
+    private fun onAnswerSelected(answer: QuestionViewState.AnswerViewState) {
         with(currentState()) {
             defaultScope.launch {
                 if (state !is QuizViewState.State.Questions || state.currentQuestion.answers.any { it.isSelected }) {
@@ -84,7 +88,7 @@ class QuizViewModel(application: Application, private val appDataStore: AppDataS
 
     private suspend fun QuizViewState.onCorrectAnswerSelected(
         state: QuizViewState.State.Questions,
-        answer: Question.Answer,
+        answer: QuestionViewState.AnswerViewState,
     ) {
         val currentQuestion = state.currentQuestion
 
@@ -134,7 +138,7 @@ class QuizViewModel(application: Application, private val appDataStore: AppDataS
 
     private suspend fun QuizViewState.onWrongAnswerSelected(
         state: QuizViewState.State.Questions,
-        answer: Question.Answer
+        answer: QuestionViewState.AnswerViewState
     ) {
         if (currentScore > highScore) {
             withContext(Dispatchers.IO) {
@@ -163,22 +167,6 @@ class QuizViewModel(application: Application, private val appDataStore: AppDataS
                 state = QuizViewState.State.WrongAnswer(question = state.currentQuestion)
             )
         }
-    }
-
-    private fun ImmutableList<Question>.withAnswerSetSelected(
-        currentQuestion: Question,
-        answer: Question.Answer,
-        isSelected: Boolean
-    ): ImmutableList<Question> {
-        return replace(
-            currentQuestion,
-            currentQuestion.copy(
-                answers = currentQuestion.answers.replace(
-                    answer,
-                    answer.copy(isSelected = isSelected)
-                ).toImmutableList()
-            )
-        ).toImmutableList()
     }
 
     companion object {

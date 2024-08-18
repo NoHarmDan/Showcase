@@ -1,6 +1,6 @@
 package eu.noharmdan.showcase.di
 
-import eu.noharmdan.showcase.model.datastore.AppDataStore
+import eu.noharmdan.data.datastore.AppDataStore
 import eu.noharmdan.showcase.rest.ClientFactory
 import eu.noharmdan.showcase.scene.quiz.QuizViewModel
 import eu.noharmdan.showcase.usecase.GetRandomQuestionsUseCase

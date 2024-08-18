@@ -1,4 +1,4 @@
-package eu.noharmdan.showcase.model
+package eu.noharmdan.data.model
 
 enum class QuestionDifficulty(val id: String) {
     Unknown(id = "unknown"),

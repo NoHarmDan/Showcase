@@ -1,9 +1,9 @@
 package eu.noharmdan.showcase.usecase
 
 import eu.noharmdan.common.base.UseCase
-import eu.noharmdan.showcase.scene.quiz.Question
-import eu.noharmdan.showcase.model.QuestionCategory
-import eu.noharmdan.showcase.model.QuestionDifficulty
+import eu.noharmdan.data.model.Question
+import eu.noharmdan.data.model.QuestionCategory
+import eu.noharmdan.data.model.QuestionDifficulty
 import eu.noharmdan.showcase.rest.ApiResponse
 import eu.noharmdan.showcase.rest.RestClient
 import eu.noharmdan.showcase.rest.getResult
@@ -26,7 +26,7 @@ class GetRandomQuestionsUseCase(
         emit(
             when (response) {
                 is ApiResponse.Data -> response.data.map { questionResponse ->
-                    Question.fromQuestionResponse(questionResponse)
+                    questionResponse.toQuestion()
                 }
                 is ApiResponse.NoContent -> emptyList()
                 is ApiResponse.Error -> {

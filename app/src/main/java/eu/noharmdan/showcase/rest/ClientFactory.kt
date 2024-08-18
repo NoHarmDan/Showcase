@@ -5,8 +5,8 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import com.google.gson.JsonSyntaxException
-import eu.noharmdan.showcase.model.QuestionCategory
-import eu.noharmdan.showcase.model.QuestionDifficulty
+import eu.noharmdan.data.model.QuestionCategory
+import eu.noharmdan.data.model.QuestionDifficulty
 import eu.noharmdan.showcase.rest.converter.QuestionCategoryConverter
 import eu.noharmdan.showcase.rest.converter.QuestionDifficultyConverter
 import okhttp3.OkHttpClient

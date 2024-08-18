@@ -1,4 +1,4 @@
-package eu.noharmdan.showcase.model.datastore
+package eu.noharmdan.data.datastore
 
 import android.content.Context
 import eu.noharmdan.common.base.BaseDataStore

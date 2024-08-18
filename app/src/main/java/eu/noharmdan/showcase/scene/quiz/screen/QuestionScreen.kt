@@ -21,10 +21,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import eu.noharmdan.showcase.R
+import eu.noharmdan.data.R
 import eu.noharmdan.showcase.scene.quiz.OnEvent
+import eu.noharmdan.showcase.scene.quiz.QuestionViewState
 import eu.noharmdan.showcase.scene.quiz.QuizViewEvent
-import eu.noharmdan.showcase.scene.quiz.Question
 import eu.noharmdan.showcase.scene.quiz.model.placeholderQuestion
 import eu.noharmdan.showcase.ui.theme.ShowcaseTheme
 import eu.noharmdan.showcase.ui.theme.errorButtonColors
@@ -35,7 +35,7 @@ fun QuestionScreen(
     modifier: Modifier = Modifier,
     highScore: Int,
     currentScore: Int,
-    currentQuestion: Question,
+    currentQuestion: QuestionViewState,
     onEvent: OnEvent
 ) {
     Column(
@@ -99,9 +99,11 @@ fun QuestionScreen(
                             !answer.isSelected -> {
                                 ButtonDefaults.buttonColors()
                             }
+
                             answer.isCorrect -> {
                                 successButtonColors()
                             }
+
                             else -> {
                                 errorButtonColors()
                             }

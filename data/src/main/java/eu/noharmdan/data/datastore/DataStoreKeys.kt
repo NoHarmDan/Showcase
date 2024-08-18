@@ -1,4 +1,4 @@
-package eu.noharmdan.showcase.model.datastore
+package eu.noharmdan.data.datastore
 
 import androidx.datastore.preferences.core.intPreferencesKey
 

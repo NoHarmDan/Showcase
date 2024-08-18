@@ -1,7 +1,7 @@
-package eu.noharmdan.showcase.model
+package eu.noharmdan.data.model
 
 import androidx.annotation.StringRes
-import eu.noharmdan.showcase.R
+import eu.noharmdan.data.R
 
 enum class QuestionCategory(val id: String, @StringRes val titleResId: Int) {
     Unknown(id = "unknown", titleResId = R.string.category_unknown),

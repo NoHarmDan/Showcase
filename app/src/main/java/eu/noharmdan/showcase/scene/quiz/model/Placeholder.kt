@@ -1,12 +1,11 @@
 package eu.noharmdan.showcase.scene.quiz.model
 
-import eu.noharmdan.showcase.model.QuestionCategory
-import eu.noharmdan.showcase.model.QuestionDifficulty
-import eu.noharmdan.showcase.scene.quiz.Question
+import eu.noharmdan.data.model.QuestionCategory
+import eu.noharmdan.data.model.QuestionDifficulty
+import eu.noharmdan.showcase.scene.quiz.QuestionViewState
 import kotlinx.collections.immutable.persistentListOf
 
-val placeholderQuestion = Question(
-    id = "some_id",
+val placeholderQuestion = QuestionViewState(
     category = QuestionCategory.Science,
     tags = persistentListOf("a_tag"),
     regions = persistentListOf(),
@@ -14,22 +13,22 @@ val placeholderQuestion = Question(
     isNiche = true,
     text = "What is the airspeed velocity of an unladen swallow?",
     answers = persistentListOf(
-        Question.Answer(
+        QuestionViewState.AnswerViewState(
             text = "8 mps",
             isCorrect = false,
             isSelected = false,
         ),
-        Question.Answer(
+        QuestionViewState.AnswerViewState(
             text = "11 mps",
             isCorrect = false,
             isSelected = false,
         ),
-        Question.Answer(
+        QuestionViewState.AnswerViewState(
             text = "14 mps",
             isCorrect = false,
             isSelected = false,
         ),
-        Question.Answer(
+        QuestionViewState.AnswerViewState(
             text = "An African or European swallow?",
             isCorrect = true,
             isSelected = true,
