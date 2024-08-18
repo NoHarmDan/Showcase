@@ -24,10 +24,11 @@ import androidx.compose.ui.unit.dp
 import eu.noharmdan.showcase.R
 import eu.noharmdan.showcase.scene.quiz.OnEvent
 import eu.noharmdan.showcase.scene.quiz.QuizViewEvent
-import eu.noharmdan.showcase.scene.quiz.model.Question
+import eu.noharmdan.showcase.scene.quiz.Question
 import eu.noharmdan.showcase.scene.quiz.model.placeholderQuestion
 import eu.noharmdan.showcase.ui.theme.ShowcaseTheme
-import eu.noharmdan.showcase.ui.theme.highlightedButtonColors
+import eu.noharmdan.showcase.ui.theme.errorButtonColors
+import eu.noharmdan.showcase.ui.theme.successButtonColors
 
 @Composable
 fun QuestionScreen(
@@ -35,7 +36,6 @@ fun QuestionScreen(
     highScore: Int,
     currentScore: Int,
     currentQuestion: Question,
-    isCorrectAnswerSelected: Boolean,
     onEvent: OnEvent
 ) {
     Column(
@@ -95,11 +95,16 @@ fun QuestionScreen(
                     if (itemIndex < currentAnswers.size) {
                         val answer = currentAnswers[itemIndex]
 
-                        // todo move isCorrectAnswerSelected to answer?
-                        val buttonColors = if (answer.isCorrect && isCorrectAnswerSelected) {
-                            highlightedButtonColors()
-                        } else {
-                            ButtonDefaults.buttonColors()
+                        val buttonColors = when {
+                            !answer.isSelected -> {
+                                ButtonDefaults.buttonColors()
+                            }
+                            answer.isCorrect -> {
+                                successButtonColors()
+                            }
+                            else -> {
+                                errorButtonColors()
+                            }
                         }
 
                         Button(
@@ -138,7 +143,6 @@ private fun QuestionPreview() {
             highScore = 17,
             currentScore = 6,
             currentQuestion = placeholderQuestion,
-            isCorrectAnswerSelected = true,
             onEvent = {}
         )
     }

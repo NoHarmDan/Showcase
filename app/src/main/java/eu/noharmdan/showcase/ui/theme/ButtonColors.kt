@@ -5,7 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun highlightedButtonColors() = ButtonDefaults.buttonColors().copy(
+fun successButtonColors() = ButtonDefaults.buttonColors().copy(
     containerColor = GreenSuccess,
+    contentColor = Color.White
+)
+
+@Composable
+fun errorButtonColors() = ButtonDefaults.buttonColors().copy(
+    containerColor = RedError,
     contentColor = Color.White
 )

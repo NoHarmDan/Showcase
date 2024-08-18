@@ -3,8 +3,9 @@ package eu.noharmdan.showcase.scene.quiz
 import android.app.Application
 import eu.noharmdan.showcase.base.BaseViewModel
 import eu.noharmdan.showcase.model.datastore.AppDataStore
-import eu.noharmdan.showcase.scene.quiz.model.Question
 import eu.noharmdan.showcase.usecase.GetRandomQuestionsUseCase
+import eu.noharmdan.showcase.util.replace
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -67,24 +68,33 @@ class QuizViewModel(application: Application, private val appDataStore: AppDataS
     private fun onAnswerSelected(answer: Question.Answer) {
         with(currentState()) {
             defaultScope.launch {
-                if (state !is QuizViewState.State.Questions || state.isCorrectAnswerSelected) {
+                if (state !is QuizViewState.State.Questions || state.currentQuestion.answers.any { it.isSelected }) {
                     return@launch
                 }
 
                 if (answer.isCorrect) {
-                    onCorrectAnswerSelected(state)
+                    onCorrectAnswerSelected(state, answer)
                 } else {
-                    onWrongAnswerSelected(state)
+                    onWrongAnswerSelected(state, answer)
                 }
             }
         }
     }
 
-    private suspend fun QuizViewState.onCorrectAnswerSelected(questionsState: QuizViewState.State.Questions) {
+    private suspend fun QuizViewState.onCorrectAnswerSelected(
+        state: QuizViewState.State.Questions,
+        answer: Question.Answer,
+    ) {
+        val currentQuestion = state.currentQuestion
+
         updateState {
             copy(
-                state = questionsState.copy(
-                    isCorrectAnswerSelected = true
+                state = state.copy(
+                    questions = state.questions.withAnswerSetSelected(
+                        currentQuestion = currentQuestion,
+                        answer = answer,
+                        isSelected = true
+                    )
                 )
             )
         }
@@ -92,14 +102,18 @@ class QuizViewModel(application: Application, private val appDataStore: AppDataS
         delay(timeMillis = NEXT_QUESTION_DELAY)
 
         val score = currentScore + 1
-        val nextQuestionIndex = questionsState.currentQuestionIndex + 1
+        val nextQuestionIndex = state.currentQuestionIndex + 1
 
         if (nextQuestionIndex == QUESTIONS_LIMIT) {
             updateState {
                 copy(
                     currentScore = score,
-                    state = questionsState.copy(
-                        isCorrectAnswerSelected = false
+                    state = state.copy(
+                        questions = state.questions.withAnswerSetSelected(
+                            currentQuestion = currentQuestion,
+                            answer = answer,
+                            isSelected = false
+                        )
                     )
                 )
             }
@@ -109,27 +123,61 @@ class QuizViewModel(application: Application, private val appDataStore: AppDataS
             updateState {
                 copy(
                     currentScore = score,
-                    state = questionsState.copy(
-                        currentQuestionIndex = nextQuestionIndex,
-                        isCorrectAnswerSelected = false
+                    state = state.copy(
+                        currentQuestionIndex = nextQuestionIndex
                     )
                 )
             }
         }
     }
 
-    private suspend fun QuizViewState.onWrongAnswerSelected(state: QuizViewState.State.Questions) {
+    private suspend fun QuizViewState.onWrongAnswerSelected(
+        state: QuizViewState.State.Questions,
+        answer: Question.Answer
+    ) {
         if (currentScore > highScore) {
             withContext(Dispatchers.IO) {
                 appDataStore.setHighScore(highScore = currentScore)
             }
         }
 
+        val currentQuestion = state.currentQuestion
+
+        updateState {
+            copy(
+                state = state.copy(
+                    questions = state.questions.withAnswerSetSelected(
+                        currentQuestion = currentQuestion,
+                        answer = answer,
+                        isSelected = true
+                    )
+                )
+            )
+        }
+
+        delay(timeMillis = NEXT_QUESTION_DELAY)
+
         updateState {
             copy(
                 state = QuizViewState.State.WrongAnswer(question = state.currentQuestion)
             )
         }
+    }
+
+    private fun ImmutableList<Question>.withAnswerSetSelected(
+        currentQuestion: Question,
+        answer: Question.Answer,
+        isSelected: Boolean
+    ): ImmutableList<Question> {
+        return replace(
+            currentQuestion,
+            currentQuestion.copy(
+                answers = currentQuestion.answers.replace(
+                    answer,
+                    answer.copy(isSelected = isSelected)
+                ).toImmutableList()
+            )
+        ).toImmutableList()
     }
 
     companion object {

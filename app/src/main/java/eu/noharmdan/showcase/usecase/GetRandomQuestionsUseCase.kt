@@ -1,7 +1,7 @@
 package eu.noharmdan.showcase.usecase
 
 import eu.noharmdan.showcase.base.UseCase
-import eu.noharmdan.showcase.scene.quiz.model.Question
+import eu.noharmdan.showcase.scene.quiz.Question
 import eu.noharmdan.showcase.model.QuestionCategory
 import eu.noharmdan.showcase.model.QuestionDifficulty
 import eu.noharmdan.showcase.rest.ApiResponse

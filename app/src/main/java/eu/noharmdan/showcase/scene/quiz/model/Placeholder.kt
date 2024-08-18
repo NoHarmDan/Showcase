@@ -2,6 +2,7 @@ package eu.noharmdan.showcase.scene.quiz.model
 
 import eu.noharmdan.showcase.model.QuestionCategory
 import eu.noharmdan.showcase.model.QuestionDifficulty
+import eu.noharmdan.showcase.scene.quiz.Question
 import kotlinx.collections.immutable.persistentListOf
 
 val placeholderQuestion = Question(
@@ -15,19 +16,23 @@ val placeholderQuestion = Question(
     answers = persistentListOf(
         Question.Answer(
             text = "8 mps",
-            isCorrect = false
+            isCorrect = false,
+            isSelected = false,
         ),
         Question.Answer(
             text = "11 mps",
-            isCorrect = false
+            isCorrect = false,
+            isSelected = false,
         ),
         Question.Answer(
             text = "14 mps",
-            isCorrect = false
+            isCorrect = false,
+            isSelected = false,
         ),
         Question.Answer(
             text = "An African or European swallow?",
-            isCorrect = true
+            isCorrect = true,
+            isSelected = true,
         ),
     )
 )
