@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Showcase"
 include(":app")
- 
+include(":common")

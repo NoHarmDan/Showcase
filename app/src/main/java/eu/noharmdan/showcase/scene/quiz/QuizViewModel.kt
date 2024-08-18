@@ -1,10 +1,10 @@
 package eu.noharmdan.showcase.scene.quiz
 
 import android.app.Application
-import eu.noharmdan.showcase.base.BaseViewModel
+import eu.noharmdan.common.base.BaseViewModel
+import eu.noharmdan.common.util.replace
 import eu.noharmdan.showcase.model.datastore.AppDataStore
 import eu.noharmdan.showcase.usecase.GetRandomQuestionsUseCase
-import eu.noharmdan.showcase.util.replace
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
@@ -13,9 +13,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class QuizViewModel(application: Application, private val appDataStore: AppDataStore) : BaseViewModel<QuizViewState, QuizViewEvent, QuizViewCommand>(application, QuizViewState()) {
+class QuizViewModel(application: Application, private val appDataStore: AppDataStore) : BaseViewModel<QuizViewState, QuizViewEvent, QuizViewCommand>(application, QuizViewState()), KoinComponent {
 
     private val getRandomQuestionsUseCase: GetRandomQuestionsUseCase by inject()
 

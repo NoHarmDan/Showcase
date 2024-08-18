@@ -1,4 +1,4 @@
-package eu.noharmdan.showcase.base
+package eu.noharmdan.common.base
 
 import android.content.Context
 import androidx.datastore.core.DataMigration
@@ -9,7 +9,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
-import eu.noharmdan.showcase.util.baseCoroutineExceptionHandler
+import eu.noharmdan.common.util.baseCoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

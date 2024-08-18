@@ -1,7 +1,7 @@
 package eu.noharmdan.showcase.scene.quiz
 
 import androidx.compose.runtime.Immutable
-import eu.noharmdan.showcase.base.ViewState
+import eu.noharmdan.common.base.ViewState
 import eu.noharmdan.showcase.model.QuestionCategory
 import eu.noharmdan.showcase.model.QuestionDifficulty
 import eu.noharmdan.showcase.rest.response.QuestionResponse

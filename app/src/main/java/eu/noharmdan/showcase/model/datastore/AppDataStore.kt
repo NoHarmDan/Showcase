@@ -1,7 +1,7 @@
 package eu.noharmdan.showcase.model.datastore
 
 import android.content.Context
-import eu.noharmdan.showcase.base.BaseDataStore
+import eu.noharmdan.common.base.BaseDataStore
 
 class AppDataStore(context: Context) : BaseDataStore(context, NAME) {
 

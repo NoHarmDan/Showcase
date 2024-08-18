@@ -1,8 +1,8 @@
-package eu.noharmdan.showcase.base
+package eu.noharmdan.common.base
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import eu.noharmdan.showcase.util.baseCoroutineExceptionHandler
+import eu.noharmdan.common.util.baseCoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
 
 /**
  * Base MVI view model class to be extended by all view models.
@@ -25,7 +24,7 @@ import org.koin.core.component.KoinComponent
  *
  * Establishes coroutine scopes for all types of operations - [uiScope], [ioScope] and [defaultScope].
  */
-abstract class BaseViewModel<STATE : ViewState, EVENT : ViewEvent, COMMAND : ViewCommand>(application: Application, val initialState: STATE) : AndroidViewModel(application), KoinComponent {
+abstract class BaseViewModel<STATE : ViewState, EVENT : ViewEvent, COMMAND : ViewCommand>(application: Application, val initialState: STATE) : AndroidViewModel(application) {
 
     private val uiJob = SupervisorJob()
     private val ioJob = SupervisorJob()
@@ -109,7 +108,7 @@ abstract class BaseViewModel<STATE : ViewState, EVENT : ViewEvent, COMMAND : Vie
     /**
      * Call to send a one-time command to the UI.
      */
-    protected suspend fun sendCommand(command : COMMAND) {
+    protected suspend fun sendCommand(command: COMMAND) {
         _commandFlow.emit(command)
     }
 

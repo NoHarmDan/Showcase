@@ -10,8 +10,8 @@ import eu.noharmdan.showcase.scene.quiz.screen.IntroductionScreen
 import eu.noharmdan.showcase.scene.quiz.screen.LoadingScreen
 import eu.noharmdan.showcase.scene.quiz.screen.QuestionScreen
 import eu.noharmdan.showcase.scene.quiz.screen.WrongAnswerScreen
-import eu.noharmdan.showcase.util.collectState
-import eu.noharmdan.showcase.util.getOnEvent
+import eu.noharmdan.common.util.collectState
+import eu.noharmdan.common.util.getOnEvent
 import org.koin.androidx.compose.getViewModel
 
 typealias OnEvent = (QuizViewEvent) -> Unit

@@ -1,6 +1,6 @@
 package eu.noharmdan.showcase.scene.quiz
 
-import eu.noharmdan.showcase.base.ViewCommand
+import eu.noharmdan.common.base.ViewCommand
 
 sealed class QuizViewCommand : ViewCommand {
 }

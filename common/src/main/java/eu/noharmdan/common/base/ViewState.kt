@@ -1,4 +1,4 @@
-package eu.noharmdan.showcase.base
+package eu.noharmdan.common.base
 
 import androidx.compose.runtime.Immutable
 

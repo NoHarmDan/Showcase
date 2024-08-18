@@ -1,4 +1,4 @@
-package eu.noharmdan.showcase.util
+package eu.noharmdan.common.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -9,20 +9,14 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import eu.noharmdan.showcase.base.BaseViewModel
-import eu.noharmdan.showcase.base.ViewCommand
-import eu.noharmdan.showcase.base.ViewEvent
-import eu.noharmdan.showcase.base.ViewState
-import kotlinx.coroutines.CoroutineExceptionHandler
+import eu.noharmdan.common.base.BaseViewModel
+import eu.noharmdan.common.base.ViewCommand
+import eu.noharmdan.common.base.ViewEvent
+import eu.noharmdan.common.base.ViewState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
-
-val baseCoroutineExceptionHandler = CoroutineExceptionHandler { _, ex ->
-    throw ex
-    // todo decide of exception should be thrown or only reported to e.g. Firebase Crashlytics etc.
-}
 
 /**
  * Convenience extension function for lifecycle-aware collection of view model state.
@@ -64,6 +58,3 @@ fun <COMMAND : ViewCommand> CollectCommand(
             .launchIn(this + baseCoroutineExceptionHandler)
     }
 }
-
-// todo move elsewhere?
-fun <E> Iterable<E>.replace(old: E, new: E) = map { if (it == old) new else it }
