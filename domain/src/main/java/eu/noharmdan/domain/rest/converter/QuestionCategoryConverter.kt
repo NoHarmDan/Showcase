@@ -10,7 +10,7 @@ import com.google.gson.JsonSerializer
 import eu.noharmdan.data.model.QuestionCategory
 import java.lang.reflect.Type
 
-class QuestionCategoryConverter : JsonDeserializer<QuestionCategory?>, JsonSerializer<QuestionCategory?> {
+internal class QuestionCategoryConverter : JsonDeserializer<QuestionCategory?>, JsonSerializer<QuestionCategory?> {
     @Throws(JsonParseException::class)
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext?): QuestionCategory {
         return QuestionCategory.getById(json.asString)

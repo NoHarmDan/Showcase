@@ -2,7 +2,7 @@ package eu.noharmdan.showcase.scene.quiz
 
 import android.app.Application
 import eu.noharmdan.common.base.BaseViewModel
-import eu.noharmdan.data.datastore.AppDataStore
+import eu.noharmdan.data.datastore.QuizDataStore
 import eu.noharmdan.showcase.scene.quiz.util.toQuestionViewState
 import eu.noharmdan.showcase.scene.quiz.util.withAnswerSetSelected
 import eu.noharmdan.domain.usecase.GetRandomQuestionsUseCase
@@ -16,12 +16,12 @@ import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class QuizViewModel(application: Application, private val appDataStore: AppDataStore) : BaseViewModel<QuizViewState, QuizViewEvent, QuizViewCommand>(application, QuizViewState()), KoinComponent {
+class QuizViewModel(application: Application, private val quizDataStore: QuizDataStore) : BaseViewModel<QuizViewState, QuizViewEvent, QuizViewCommand>(application, QuizViewState()), KoinComponent {
 
     private val getRandomQuestionsUseCase: GetRandomQuestionsUseCase by inject()
 
     init {
-        appDataStore.highScore.onEach { highScore ->
+        quizDataStore.highScore.onEach { highScore ->
             updateState {
                 copy(highScore = highScore)
             }
@@ -140,7 +140,7 @@ class QuizViewModel(application: Application, private val appDataStore: AppDataS
     ) {
         if (currentScore > highScore) {
             withContext(Dispatchers.IO) {
-                appDataStore.setHighScore(highScore = currentScore)
+                quizDataStore.setHighScore(highScore = currentScore)
             }
         }
 

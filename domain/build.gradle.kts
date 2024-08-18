@@ -36,6 +36,8 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
 
+    implementation(libs.koin.core)
+
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)

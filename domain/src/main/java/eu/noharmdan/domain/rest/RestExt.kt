@@ -2,7 +2,7 @@ package eu.noharmdan.domain.rest
 
 import retrofit2.Response
 
-suspend fun <T> RestClient.getResult(call: suspend RestClient.() -> Response<T>): ApiResponse<T> {
+internal suspend fun <T> RestClient.getResult(call: suspend RestClient.() -> Response<T>): ApiResponse<T> {
     return try {
         val response = call(this)
 

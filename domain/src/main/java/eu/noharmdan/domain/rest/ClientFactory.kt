@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
-object ClientFactory {
+internal object ClientFactory {
     private const val TAG = "OkHttp"
     private const val BASE_URL = "https://the-trivia-api.com/v2/"
     private const val TIMEOUT_DEFAULT = 10L

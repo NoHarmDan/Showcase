@@ -1,6 +1,6 @@
 package eu.noharmdan.domain.rest
 
-sealed class ApiResponse<out T>(
+internal sealed class ApiResponse<out T>(
     val code: Int
 ) {
 
