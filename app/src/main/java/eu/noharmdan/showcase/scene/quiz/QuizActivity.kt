@@ -1,12 +1,20 @@
 package eu.noharmdan.showcase.scene.quiz
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import eu.noharmdan.common.ui.ConfirmationDialog
+import eu.noharmdan.common.util.CollectCommand
 import eu.noharmdan.common.util.collectState
 import eu.noharmdan.common.util.getOnEvent
+import eu.noharmdan.data.R
 import eu.noharmdan.showcase.base.BaseComposeActivity
 import eu.noharmdan.showcase.scene.quiz.model.placeholderQuestion
 import eu.noharmdan.showcase.scene.quiz.screen.ErrorScreen
@@ -31,14 +39,20 @@ class QuizActivity : BaseComposeActivity() {
 
     @Composable
     override fun RootCompose() {
-        QuizScreen()
+        QuizScreen(onQuitSelected = {
+            finish()
+        })
     }
 }
 
 /**
  * The main screen composable which sets up the [QuizViewModel]
  * and communication with it. The layout is provided through
- * the [Content] composable.
+ * the [Content] composable. Also manages the [QuitConfirmationDialog],
+ * [CommandProcessor] and a [BackHandler].
+ *
+ * @param onQuitSelected to be called when the activity should close
+ * by a request of the user.
  *
  * *This function is kept outside of the activity class body
  * as a good practice that prevents accessing any of the
@@ -48,12 +62,32 @@ class QuizActivity : BaseComposeActivity() {
  * counterparts.*
  */
 @Composable
-private fun QuizScreen() {
+private fun QuizScreen(onQuitSelected: () -> Unit) {
     val viewModel = getViewModel<QuizViewModel>()
     val viewState = viewModel.collectState()
     val onEvent = viewModel.getOnEvent()
 
-    Content(viewState, onEvent)
+    val quitConfirmationDialogState = remember { mutableStateOf(value = false) }
+
+    Content(
+        viewState = viewState,
+        onEvent = onEvent
+    )
+
+    QuitConfirmationDialog(
+        showDialog = quitConfirmationDialogState,
+        onConfirmed = onQuitSelected
+    )
+
+    CommandProcessor(
+        viewModel = viewModel,
+        quitConfirmationDialogState = quitConfirmationDialogState,
+        onQuitSelected = onQuitSelected
+    )
+
+    BackHandler {
+        onEvent(QuizViewEvent.OnBackPressed)
+    }
 }
 
 /**
@@ -81,15 +115,18 @@ private fun Content(viewState: QuizViewState, onEvent: OnEvent) {
                 QuizViewState.State.Loading -> LoadingScreen(
                     modifier = modifier
                 )
+
                 QuizViewState.State.Error -> ErrorScreen(
                     modifier = modifier,
                     onEvent = onEvent
                 )
+
                 QuizViewState.State.Introduction -> IntroductionScreen(
                     modifier = modifier,
                     highScore = viewState.highScore,
                     onEvent = onEvent
                 )
+
                 is QuizViewState.State.Questions -> {
                     viewState.state.currentQuestion?.let {
                         QuestionScreen(
@@ -104,6 +141,7 @@ private fun Content(viewState: QuizViewState, onEvent: OnEvent) {
                         onEvent = onEvent
                     )
                 }
+
                 is QuizViewState.State.WrongAnswer -> WrongAnswerScreen(
                     modifier = modifier,
                     highScore = viewState.highScore,
@@ -114,6 +152,48 @@ private fun Content(viewState: QuizViewState, onEvent: OnEvent) {
             }
         }
     )
+}
+
+/**
+ * Shows a simple alert dialog allowing the user to confirm whether they
+ * want to quite the application.
+ *
+ * @param showDialog whether the dialog should be shown (is reset by the
+ * dialog when the dialog is closed by the user)
+ * @param onConfirmed called when the user confirms their intention to quit
+ */
+@Composable
+fun QuitConfirmationDialog(
+    showDialog: MutableState<Boolean>,
+    onConfirmed: () -> Unit
+) {
+    ConfirmationDialog(
+        showDialog = showDialog,
+        title = stringResource(id = R.string.are_you_sure),
+        text = stringResource(id = R.string.quit_dialog_text),
+        confirmString = stringResource(id = R.string.quit),
+        onConfirmClicked = onConfirmed,
+        cancelString = stringResource(id = R.string.cancel)
+    )
+}
+
+/**
+ * Collects the UI commands from the [viewModel], changing the value
+ * of [quitConfirmationDialogState] to `true` if the dialog is to be
+ * shown, or calling [onQuitSelected] if the application should close.
+ */
+@Composable
+fun CommandProcessor(
+    viewModel: QuizViewModel,
+    quitConfirmationDialogState: MutableState<Boolean>,
+    onQuitSelected: () -> Unit
+) {
+    CollectCommand(viewModel = viewModel) { command ->
+        when (command) {
+            QuizViewCommand.ShowQuitConfirmationDialog -> quitConfirmationDialogState.value = true
+            QuizViewCommand.Quit -> onQuitSelected()
+        }
+    }
 }
 
 @Preview(showBackground = true)

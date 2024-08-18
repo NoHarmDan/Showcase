@@ -9,5 +9,6 @@ import eu.noharmdan.common.base.ViewEvent
 sealed class QuizViewEvent : ViewEvent {
     data object OnStartQuizSelected : QuizViewEvent()
     data object OnTryAgainSelected : QuizViewEvent()
+    data object OnBackPressed : QuizViewEvent()
     data class OnAnswerSelected(val answer: QuestionViewState.AnswerViewState) : QuizViewEvent()
 }

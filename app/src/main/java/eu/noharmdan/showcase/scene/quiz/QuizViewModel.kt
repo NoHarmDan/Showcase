@@ -3,9 +3,9 @@ package eu.noharmdan.showcase.scene.quiz
 import android.app.Application
 import eu.noharmdan.common.base.BaseViewModel
 import eu.noharmdan.data.datastore.QuizDataStore
+import eu.noharmdan.domain.usecase.GetRandomQuestionsUseCase
 import eu.noharmdan.showcase.scene.quiz.util.toQuestionViewState
 import eu.noharmdan.showcase.scene.quiz.util.withAnswerSetSelected
-import eu.noharmdan.domain.usecase.GetRandomQuestionsUseCase
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -58,6 +58,7 @@ class QuizViewModel(application: Application, private val quizDataStore: QuizDat
         when (event) {
             QuizViewEvent.OnStartQuizSelected -> getRandomQuestions(resetScore = true)
             QuizViewEvent.OnTryAgainSelected -> getRandomQuestions(resetScore = false)
+            QuizViewEvent.OnBackPressed -> onBackPressed()
             is QuizViewEvent.OnAnswerSelected -> onAnswerSelected(event.answer)
         }
     }
@@ -259,6 +260,25 @@ class QuizViewModel(application: Application, private val quizDataStore: QuizDat
             copy(
                 state = QuizViewState.State.WrongAnswer(question = currentQuestion)
             )
+        }
+    }
+
+    /**
+     * To be called when the user presses the hardware "back" button
+     * or performs the "back" gesture.
+     *
+     * Evaluates if the application can be closed immediately (when
+     * there is no progress to be lost) or when a confirmation dialog
+     * should be shown first, and sends a UI command accordingly.
+     */
+    private fun onBackPressed() {
+        defaultScope.launch {
+            val command = when (currentState().state) {
+                is QuizViewState.State.WrongAnswer, QuizViewState.State.Error, QuizViewState.State.Introduction -> QuizViewCommand.Quit
+                is QuizViewState.State.Questions, QuizViewState.State.Loading -> QuizViewCommand.ShowQuitConfirmationDialog
+            }
+
+            sendCommand(command)
         }
     }
 

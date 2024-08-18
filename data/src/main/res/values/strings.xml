@@ -20,4 +20,8 @@
     <string name="current_high_score">Current high score: %d</string>
     <string name="current_score">Current score: %d</string>
     <string name="new_high_score">New high score: %d!</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="quit_dialog_text">Do you really want to quit? Current progress will be lost.</string>
+    <string name="quit">Quit</string>
+    <string name="cancel">Cancel</string>
 </resources>

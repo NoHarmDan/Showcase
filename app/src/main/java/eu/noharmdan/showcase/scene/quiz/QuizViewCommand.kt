@@ -7,4 +7,6 @@ import eu.noharmdan.common.base.ViewCommand
  * its subclasses representing one-time view model to UI commands.
  */
 sealed class QuizViewCommand : ViewCommand {
+    data object ShowQuitConfirmationDialog : QuizViewCommand()
+    data object Quit : QuizViewCommand()
 }
