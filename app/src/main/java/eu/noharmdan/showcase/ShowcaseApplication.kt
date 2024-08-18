@@ -1,6 +1,7 @@
 package eu.noharmdan.showcase
 
 import android.app.Application
+import eu.noharmdan.data.di.dataModule
 import eu.noharmdan.domain.di.domainModule
 import eu.noharmdan.showcase.di.appModule
 import org.koin.android.ext.koin.androidContext
@@ -13,7 +14,7 @@ class ShowcaseApplication : Application() {
 
         startKoin {
             androidContext(this@ShowcaseApplication)
-            modules(appModule, domainModule)
+            modules(appModule, domainModule, dataModule)
         }
     }
 }

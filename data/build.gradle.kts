@@ -35,6 +35,8 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
 
+    implementation(libs.koin.core)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
