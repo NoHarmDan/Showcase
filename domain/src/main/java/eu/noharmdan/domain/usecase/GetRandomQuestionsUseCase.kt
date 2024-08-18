@@ -7,8 +7,14 @@ import eu.noharmdan.data.model.QuestionDifficulty
 import eu.noharmdan.domain.rest.ApiResponse
 import eu.noharmdan.domain.rest.RestClient
 import eu.noharmdan.domain.util.getResult
+import eu.noharmdan.domain.util.toQuestion
 import kotlinx.coroutines.flow.flow
 
+/**
+ * The reusable Use Case providing a new list of [Question] with each [execute] call.
+ *
+ * @see GetRandomQuestionsParams
+ */
 class GetRandomQuestionsUseCase(
     private val restClient: RestClient
 ) : BaseUseCase<GetRandomQuestionsUseCase.GetRandomQuestionsParams, List<Question>?>() {
@@ -38,6 +44,12 @@ class GetRandomQuestionsUseCase(
         )
     }
 
+    /**
+     * @param limit the optional maximum number of questions to fetch (default is 10, maximum is 50)
+     * @param categories the optional list of [QuestionCategory] to limit the results
+     * @param difficulties the optional list of [QuestionDifficulty] to limit the results
+     * @param tags the optional list of text tags to limit the results
+     */
     data class GetRandomQuestionsParams(
         val limit: Int? = null,
         val categories: List<QuestionCategory>? = null,

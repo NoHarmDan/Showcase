@@ -6,6 +6,10 @@ import eu.noharmdan.data.model.QuestionDifficulty
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
+/**
+ * A simple set of functions to test [QuestionCategory] and [QuestionDifficulty] serialization and deserialization,
+ * assuming the serialized value is the [QuestionCategory.id] or [QuestionDifficulty.id].
+ */
 class QuestionConvertersUnitTest {
 
     @Test
