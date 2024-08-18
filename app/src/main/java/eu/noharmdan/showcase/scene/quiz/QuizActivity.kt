@@ -90,13 +90,20 @@ private fun Content(viewState: QuizViewState, onEvent: OnEvent) {
                     highScore = viewState.highScore,
                     onEvent = onEvent
                 )
-                is QuizViewState.State.Questions -> QuestionScreen(
-                    modifier = modifier,
-                    highScore = viewState.highScore,
-                    currentScore = viewState.currentScore,
-                    currentQuestion = viewState.state.currentQuestion,
-                    onEvent = onEvent
-                )
+                is QuizViewState.State.Questions -> {
+                    viewState.state.currentQuestion?.let {
+                        QuestionScreen(
+                            modifier = modifier,
+                            highScore = viewState.highScore,
+                            currentScore = viewState.currentScore,
+                            currentQuestion = it,
+                            onEvent = onEvent
+                        )
+                    } ?: ErrorScreen(
+                        modifier = modifier,
+                        onEvent = onEvent
+                    )
+                }
                 is QuizViewState.State.WrongAnswer -> WrongAnswerScreen(
                     modifier = modifier,
                     highScore = viewState.highScore,

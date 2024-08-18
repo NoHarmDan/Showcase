@@ -71,14 +71,30 @@ class QuizViewModel(application: Application, private val quizDataStore: QuizDat
     private fun onAnswerSelected(answer: QuestionViewState.AnswerViewState) {
         with(currentState()) {
             defaultScope.launch {
-                if (state !is QuizViewState.State.Questions || state.currentQuestion.answers.any { it.isSelected }) {
+                if (state !is QuizViewState.State.Questions) {
+                    return@launch
+                }
+
+                val currentQuestion = state.currentQuestion
+
+                if (currentQuestion == null) {
+                    updateState {
+                        copy(
+                            state = QuizViewState.State.Error
+                        )
+                    }
+
+                    return@launch
+                }
+
+                if (currentQuestion.answers.any { it.isSelected }) {
                     return@launch
                 }
 
                 if (answer.isCorrect) {
-                    onCorrectAnswerSelected(state, answer)
+                    onCorrectAnswerSelected(state, currentQuestion, answer)
                 } else {
-                    onWrongAnswerSelected(state, answer)
+                    onWrongAnswerSelected(state, currentQuestion, answer)
                 }
             }
         }
@@ -86,10 +102,9 @@ class QuizViewModel(application: Application, private val quizDataStore: QuizDat
 
     private suspend fun QuizViewState.onCorrectAnswerSelected(
         state: QuizViewState.State.Questions,
+        currentQuestion: QuestionViewState,
         answer: QuestionViewState.AnswerViewState,
     ) {
-        val currentQuestion = state.currentQuestion
-
         updateState {
             copy(
                 state = state.copy(
@@ -136,6 +151,7 @@ class QuizViewModel(application: Application, private val quizDataStore: QuizDat
 
     private suspend fun QuizViewState.onWrongAnswerSelected(
         state: QuizViewState.State.Questions,
+        currentQuestion: QuestionViewState,
         answer: QuestionViewState.AnswerViewState
     ) {
         if (currentScore > highScore) {
@@ -143,8 +159,6 @@ class QuizViewModel(application: Application, private val quizDataStore: QuizDat
                 quizDataStore.setHighScore(highScore = currentScore)
             }
         }
-
-        val currentQuestion = state.currentQuestion
 
         updateState {
             copy(
@@ -162,7 +176,7 @@ class QuizViewModel(application: Application, private val quizDataStore: QuizDat
 
         updateState {
             copy(
-                state = QuizViewState.State.WrongAnswer(question = state.currentQuestion)
+                state = QuizViewState.State.WrongAnswer(question = currentQuestion)
             )
         }
     }
