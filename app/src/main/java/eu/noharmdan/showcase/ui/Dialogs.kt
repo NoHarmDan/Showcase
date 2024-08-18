@@ -1,4 +1,4 @@
-package eu.noharmdan.common.ui
+package eu.noharmdan.showcase.ui
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog

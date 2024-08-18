@@ -10,7 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import eu.noharmdan.common.ui.ConfirmationDialog
+import eu.noharmdan.showcase.ui.ConfirmationDialog
 import eu.noharmdan.common.util.CollectCommand
 import eu.noharmdan.common.util.collectState
 import eu.noharmdan.common.util.getOnEvent
