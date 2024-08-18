@@ -19,6 +19,11 @@ import eu.noharmdan.showcase.scene.quiz.OnEvent
 import eu.noharmdan.showcase.scene.quiz.QuizViewEvent
 import eu.noharmdan.showcase.ui.theme.ShowcaseTheme
 
+/**
+ * The screen to be shown if an error occurs e.g. while fetching
+ * quiz questions. Gives the user the option to try again,
+ * triggering the [QuizViewEvent.OnTryAgainSelected] event.
+ */
 @Composable
 fun ErrorScreen(modifier: Modifier = Modifier, onEvent: OnEvent) {
     Column(
@@ -28,13 +33,11 @@ fun ErrorScreen(modifier: Modifier = Modifier, onEvent: OnEvent) {
             .padding(horizontal = 16.dp)
             .fillMaxSize()
     ) {
-        // todo ilustrace?
-
         Text(
             text = stringResource(id = R.string.something_went_wrong),
-            style = MaterialTheme.typography.titleSmall,
+            style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 32.dp)
+            modifier = Modifier.padding(start = 56.dp, end = 56.dp, bottom = 32.dp)
         )
 
         Button(

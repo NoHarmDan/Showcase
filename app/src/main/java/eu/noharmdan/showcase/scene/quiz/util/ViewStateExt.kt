@@ -7,6 +7,13 @@ import eu.noharmdan.showcase.scene.quiz.QuestionViewState.AnswerViewState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
+/**
+ * A converter function which returns a new instance of [QuestionViewState]
+ * filled with data as provided in a [Question], transforming all lists to
+ * [ImmutableList]s.
+ *
+ * All [AnswerViewState]s have their [AnswerViewState.isSelected] set to false.
+ */
 internal fun Question.toQuestionViewState() = QuestionViewState(
     category = category,
     tags = tags.toImmutableList(),
@@ -25,6 +32,11 @@ internal fun Question.toQuestionViewState() = QuestionViewState(
         .toImmutableList(),
 )
 
+/**
+ * A convenience reusable function that provides a copy of an [ImmutableList]
+ * if [QuestionViewState], where the given [answer] has its [AnswerViewState.isSelected]
+ * set to [isSelected].
+ */
 internal fun ImmutableList<QuestionViewState>.withAnswerSetSelected(
     currentQuestion: QuestionViewState,
     answer: AnswerViewState,

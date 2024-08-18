@@ -19,6 +19,12 @@ import eu.noharmdan.showcase.scene.quiz.OnEvent
 import eu.noharmdan.showcase.scene.quiz.QuizViewEvent
 import eu.noharmdan.showcase.ui.theme.ShowcaseTheme
 
+/**
+ * The screen to be shown when the app is opened and the quiz has not started yet.
+ *
+ * Shows the latest high score and gives the user the option to start the quiz,
+ * triggering the [QuizViewEvent.OnStartQuizSelected] event.
+ */
 @Composable
 fun IntroductionScreen(modifier: Modifier = Modifier, highScore: Int, onEvent: OnEvent) {
     Column(

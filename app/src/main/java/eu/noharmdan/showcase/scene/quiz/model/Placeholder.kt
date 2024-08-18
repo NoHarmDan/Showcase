@@ -5,6 +5,9 @@ import eu.noharmdan.data.model.QuestionDifficulty
 import eu.noharmdan.showcase.scene.quiz.QuestionViewState
 import kotlinx.collections.immutable.persistentListOf
 
+/**
+ * A placeholder instance of [QuestionViewState] to be used in previews etc.
+ */
 val placeholderQuestion = QuestionViewState(
     category = QuestionCategory.Science,
     tags = persistentListOf("a_tag"),

@@ -21,6 +21,16 @@ import eu.noharmdan.showcase.scene.quiz.QuizViewEvent
 import eu.noharmdan.showcase.scene.quiz.model.placeholderQuestion
 import eu.noharmdan.showcase.ui.theme.ShowcaseTheme
 
+/**
+ * The screen to be shown after the user selects the wrong answer
+ * to a quiz question.
+ *
+ * Shows the question text again and its correct answer, as well
+ * as the current score and the latest high score.
+ *
+ * Gives the user the option to try again,
+ * triggering the [QuizViewEvent.OnStartQuizSelected] event.
+ */
 @Composable
 fun WrongAnswerScreen(
     modifier: Modifier = Modifier,
@@ -40,7 +50,7 @@ fun WrongAnswerScreen(
             text = stringResource(id = R.string.wrong_answer),
             style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(start = 56.dp, end = 56.dp, bottom = 16.dp)
         )
 
         Text(

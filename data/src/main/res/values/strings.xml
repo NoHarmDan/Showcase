@@ -16,7 +16,7 @@
     <string name="something_went_wrong">Oops, something went wrong…</string>
     <string name="try_again">Try again</string>
     <string name="wrong_answer">Oops, that was not the correct answer…</string>
-    <string name="correct_answer_is">The correct answer to \"%1$s\" is \"%2$s\"</string>
+    <string name="correct_answer_is">The correct answer to \"%1$s\" is:\n\"%2$s\"</string>
     <string name="current_high_score">Current high score: %d</string>
     <string name="current_score">Current score: %d</string>
     <string name="new_high_score">New high score: %d!</string>

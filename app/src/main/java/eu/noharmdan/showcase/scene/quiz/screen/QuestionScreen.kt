@@ -30,6 +30,15 @@ import eu.noharmdan.showcase.ui.theme.ShowcaseTheme
 import eu.noharmdan.showcase.ui.theme.errorButtonColors
 import eu.noharmdan.showcase.ui.theme.successButtonColors
 
+/**
+ * The main screen of the quiz.
+ *
+ * Shows the [currentQuestion], the [currentScore] and a variable
+ * grid of buttons with possible answers. Correct answers are briefly
+ * highlighted green, while incorrect ones are highlighted red.
+ *
+ * Answer selection triggers the [QuizViewEvent.OnAnswerSelected] event.
+ */
 @Composable
 fun QuestionScreen(
     modifier: Modifier = Modifier,
@@ -46,8 +55,14 @@ fun QuestionScreen(
     ) {
         val currentAnswers = currentQuestion.answers
 
+        /*
+         * If current score is higher than the latest high score, we let the user know they rock.
+         * This can also be done on the view model level, carrying a ready-made text in the view state.
+         * Neither option is inherently wrong.
+         */
         val scoreTextId = if (currentScore > highScore) R.string.new_high_score else R.string.current_score
 
+        // Question category and current score
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
@@ -65,6 +80,10 @@ fun QuestionScreen(
             )
         }
 
+        /*
+         * Question text, encapsulated in a Box as the only means to align it
+         * in to the center of its part of the screen.
+         */
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
@@ -80,6 +99,10 @@ fun QuestionScreen(
             )
         }
 
+        /*
+         * Always two columns but as many rows as needed,
+         * taking an odd number of answers into account.
+         */
         val columns = 2
         val rows = (currentAnswers.size + 1) / columns
 
@@ -95,15 +118,19 @@ fun QuestionScreen(
                     if (itemIndex < currentAnswers.size) {
                         val answer = currentAnswers[itemIndex]
 
+                        /*
+                         * In a "real" application, more robust themes would
+                         * be established and available, as well as custom
+                         * reusable button implementations that reduce boilerplate
+                         * etc.
+                         */
                         val buttonColors = when {
                             !answer.isSelected -> {
                                 ButtonDefaults.buttonColors()
                             }
-
                             answer.isCorrect -> {
                                 successButtonColors()
                             }
-
                             else -> {
                                 errorButtonColors()
                             }
@@ -128,6 +155,7 @@ fun QuestionScreen(
                             }
                         )
                     } else {
+                        // In case of an odd number of answers
                         Spacer(modifier = Modifier.weight(weight = 1f))
                     }
                 }

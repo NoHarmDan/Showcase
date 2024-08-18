@@ -11,6 +11,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import eu.noharmdan.showcase.ui.theme.ShowcaseTheme
 
+/**
+ * The screen to be shown when the application is e.g. loading data
+ * and the user must wait.
+ */
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
     Box(
@@ -23,6 +27,11 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
          * we would probably use shimmers rather than
          * circular progress bars, as well as possibly
          * inform the user what is loading as such.
+         *
+         * Or, even better, pre-load the next set of
+         * questions before the user answers the last
+         * one currently loaded, so that no loading
+         * needs to be shown.
          */
         CircularProgressIndicator(
             modifier = Modifier.size(size = 156.dp)
