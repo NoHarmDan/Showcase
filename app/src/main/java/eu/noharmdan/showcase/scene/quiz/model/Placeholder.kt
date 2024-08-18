@@ -7,10 +7,10 @@ import kotlinx.collections.immutable.persistentListOf
 
 val placeholderQuestion = Question(
     id = "some_id",
-    category = QuestionCategory.science,
+    category = QuestionCategory.Science,
     tags = persistentListOf("a_tag"),
     regions = persistentListOf(),
-    difficulty = QuestionDifficulty.medium,
+    difficulty = QuestionDifficulty.Medium,
     isNiche = true,
     text = "What is the airspeed velocity of an unladen swallow?",
     answers = persistentListOf(
