@@ -13,7 +13,7 @@ Albeit too simple to be a perfect example of it, and with some deviations, the p
 
 Traditionally, the UI would be implemented in its own module, but due to the scale of this example, it was merged within the `app` module, which typically serves as the top-level module which puts all the other modules together, but would be nearly empty here otherwise. This module also directs the dependency injection using [Koin](https://insert-koin.io/).
 
-The `common` module is present as layer "alongside" the lowest layers of the application, containing all classes and functions that _may_ be used by any other module, e.g. base MVI classes, extension functions etc.
+The `common` module is present as a layer "alongside" the lowest layers of the application, containing all classes and functions that _may_ be used by any other module, e.g. base MVI classes, extension functions etc.
 
 ### MVI Architecture
 The project uses the MVI architecture, with the following main components:
